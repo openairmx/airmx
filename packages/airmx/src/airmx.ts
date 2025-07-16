@@ -1,3 +1,4 @@
+import crypto from 'crypto'
 import { MqttClient } from 'mqtt'
 import { EagleStatus } from './eagle'
 import { SnowStatus } from './snow'
@@ -7,6 +8,12 @@ type TEagleListener = (status: EagleStatus) => void
 
 export interface TConfig {
   mqtt: MqttClient
+  devices: Device[]
+}
+
+export interface Device {
+  id: number
+  key: string
 }
 
 export enum Command {
@@ -122,7 +129,9 @@ export class Airmx {
       return
     }
 
-    const data = JSON.parse(message.toString())
+    const str = message.toString()
+    const data = JSON.parse(str)
+    this.#validateMessage(t.deviceId, str, data.sig)
 
     switch (data.cmdId) {
       case Command.SnowStatus:
@@ -140,5 +149,20 @@ export class Airmx {
 
   #notifyEagle(status: EagleStatus) {
     this.#listeners.eagle.forEach((listener) => listener(status))
+  }
+
+  #validateMessage(deviceId: number, message: string, sig: string) {
+    const device = this.config.devices.find((device) => device.id === deviceId)
+    if (device === undefined) {
+      throw new Error(`Could not find the device with ID ${deviceId}.`)
+    }
+    const plainText = message.slice(1, message.lastIndexOf('"sig"'))
+    const calculated = crypto.createHash('md5')
+      .update(plainText)
+      .update(device.key)
+      .digest('hex')
+    if (calculated !== sig) {
+      throw new Error('Failed to validate the message.')
+    }
   }
 }
