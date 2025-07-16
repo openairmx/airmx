@@ -1,5 +1,5 @@
 import { MqttClient } from 'mqtt'
-import { Airmx, Topic } from './airmx'
+import { Airmx, Topic } from './airmx.js'
 
 describe('topic', () => {
   test('parse parses topic from string', () => {
