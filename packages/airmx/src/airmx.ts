@@ -91,7 +91,7 @@ export class Airmx {
 
     try {
       t = Topic.parse(topic)
-    } catch (Error) {
+    } catch (e) {
       return
     }
 
