@@ -1,28 +1,4 @@
-import { Message } from './airmx'
-
-export interface EagleStatusData {
-  version: string
-  power: number
-  mode: number
-  status: number
-  denoise: number
-  heatStatus: number
-  cadr: number
-  prm: number
-  diffPressure1: number,
-  diffPressure2: number,
-  t0: number,
-  g4Id: string
-  g4Percent: number
-  carbonId: string
-  carbonPercent: number
-  hepaId: string
-  hepaPercent: number
-}
-
-export enum EagleMode {
-  Silent = 2
-}
+import { Message, EagleStatusData, EagleMode } from './types'
 
 export class EagleStatus {
   constructor(

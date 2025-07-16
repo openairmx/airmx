@@ -1,44 +1,4 @@
-import { Command, Message } from './airmx'
-
-export enum SensorState {
-  Sampling = 'sampling'
-}
-
-export enum BatteryState {
-  Charging = 'charging',
-  Discharge = 'discharge'
-}
-
-export interface SnowStatusData {
-  battery: number
-  battery_state: BatteryState
-  co2: number
-  co2_state: SensorState
-  co2_time: number
-  h: number
-  humi_state: SensorState
-  oh: number
-  opm100: number
-  opm25: number
-  ot: number
-  pm100: number
-  pm25: number
-  pm250: number
-  pm50: number
-  pm_state: SensorState
-  pm_time: number
-  t: number
-  temp_state: SensorState
-  temp_unit: 'c'
-  time: number
-  tvoc: number
-  tvoc_duration: number
-  tvoc_state: SensorState
-  tvoc_time: number
-  tvoc_unit: 'ppb'
-  version: string
-  version_type: 'release'
-}
+import { Command, Message, SnowStatusData, BatteryState, SensorState } from './types'
 
 export class SnowStatus {
   constructor(

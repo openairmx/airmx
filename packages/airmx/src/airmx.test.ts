@@ -1,5 +1,5 @@
 import { MqttClient } from 'mqtt/*'
-import { Airmx, Topic, TOPIC_STATUS } from './airmx'
+import { Airmx, Topic } from './airmx'
 
 describe('topic', () => {
   test('parse parses topic from string', () => {
@@ -83,7 +83,7 @@ describe('airmx', () => {
       ([event]) => event === 'connect'
     )?.[1] as (() => void) | undefined;
     connectHandler?.()
-    expect(mockMqttClient.subscribe).toHaveBeenCalledWith(TOPIC_STATUS);
+    expect(mockMqttClient.subscribe).toHaveBeenCalledWith('airmx/01/+/+/1/1/+');
   })
 
   describe('message validation', () => {

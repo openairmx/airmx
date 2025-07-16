@@ -2,42 +2,12 @@ import crypto from 'crypto'
 import { MqttClient } from 'mqtt'
 import { EagleStatus } from './eagle'
 import { SnowStatus } from './snow'
-
-type TSnowListener = (status: SnowStatus) => void
-type TEagleListener = (status: EagleStatus) => void
-
-export interface Config {
-  mqtt: MqttClient
-  devices: Device[]
-}
-
-export interface Device {
-  id: number
-  key: string
-}
-
-export enum Command {
-  SnowStatus = 200,
-  EagleStatus = 210
-}
-
-export enum MessageSource {
-  Snow = 1,
-  Eagle = 2,
-  App_iOS = 3,
-  App_Android = 4
-}
-
-export interface Message<T> {
-  cmdId: number
-  name: string
-  time: number
-  from: MessageSource
-  data: T
-  sig: string
-}
-
-export const TOPIC_STATUS = 'airmx/01/+/+/1/1/+'
+import {
+  Config,
+  Command,
+  SnowListener,
+  EagleListener
+} from './types'
 
 export class Topic {
   constructor(
@@ -89,8 +59,8 @@ export class Topic {
 
 export class Airmx {
   #listeners: {
-    eagle: TEagleListener[],
-    snow: TSnowListener[]
+    eagle: EagleListener[],
+    snow: SnowListener[]
   } = {
     eagle: [],
     snow: []
@@ -106,18 +76,18 @@ export class Airmx {
     this.#client.on('message', this.#handleMessage.bind(this))
   }
 
-  onSnowUpdate(callback: TSnowListener) {
+  onSnowUpdate(callback: SnowListener) {
     this.#listeners.snow.push(callback)
     return this
   }
 
-  onEagleUpdate(callback: TEagleListener) {
+  onEagleUpdate(callback: EagleListener) {
     this.#listeners.eagle.push(callback)
     return this
   }
 
   #handleConnect() {
-    this.#client.subscribe(TOPIC_STATUS)
+    this.#client.subscribe('airmx/01/+/+/1/1/+')
   }
 
   #handleMessage(topic: string, message: Buffer): void {
