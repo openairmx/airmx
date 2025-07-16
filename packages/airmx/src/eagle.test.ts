@@ -1,4 +1,4 @@
-import { EagleMode, EagleStatus, TEagleStatusData } from './eagle'
+import { EagleMode, EagleStatus, EagleStatusData } from './eagle'
 
 test('from parses message to eagle status', () => {
   const status = EagleStatus.from(12345, createStubStatusData())
@@ -66,7 +66,7 @@ test('isHeaterOff determines if the heater is off', () => {
   expect(status.isHeaterOn()).toBe(false)
 })
 
-const createStubStatusData = (data: Partial<TEagleStatusData> = {}) => ({
+const createStubStatusData = (data: Partial<EagleStatusData> = {}) => ({
   cmdId: 210,
   data: {
     cadr: 17,

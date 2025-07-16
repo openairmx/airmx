@@ -1,6 +1,6 @@
-import { TMessage } from './airmx'
+import { Message } from './airmx'
 
-export interface TEagleStatusData {
+export interface EagleStatusData {
   version: string
   power: number
   mode: number
@@ -27,12 +27,12 @@ export enum EagleMode {
 export class EagleStatus {
   constructor(
     public readonly deviceId: number,
-    public readonly message: TMessage<TEagleStatusData>
+    public readonly message: Message<EagleStatusData>
   ) {
     //
   }
 
-  static from(deviceId: number, message: TMessage<TEagleStatusData>) {
+  static from(deviceId: number, message: Message<EagleStatusData>) {
     if (message.cmdId !== 210) {
       throw new Error('Eagle status expects a message with command ID 210.')
     }

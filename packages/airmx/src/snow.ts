@@ -1,4 +1,4 @@
-import { Command, TMessage } from './airmx'
+import { Command, Message } from './airmx'
 
 export enum SensorState {
   Sampling = 'sampling'
@@ -9,7 +9,7 @@ export enum BatteryState {
   Discharge = 'discharge'
 }
 
-export interface TSnowStatusData {
+export interface SnowStatusData {
   battery: number
   battery_state: BatteryState
   co2: number
@@ -43,12 +43,12 @@ export interface TSnowStatusData {
 export class SnowStatus {
   constructor(
     public readonly deviceId: number,
-    public readonly message: TMessage<TSnowStatusData>
+    public readonly message: Message<SnowStatusData>
   ) {
     //
   }
 
-  static from(deviceId: number, message: TMessage<TSnowStatusData>) {
+  static from(deviceId: number, message: Message<SnowStatusData>) {
     if (message.cmdId !== Command.SnowStatus) {
       throw new Error(`Snow status expects a message with command ID "${Command.SnowStatus}".`)
     }

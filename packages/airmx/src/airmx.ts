@@ -6,7 +6,7 @@ import { SnowStatus } from './snow'
 type TSnowListener = (status: SnowStatus) => void
 type TEagleListener = (status: EagleStatus) => void
 
-export interface TConfig {
+export interface Config {
   mqtt: MqttClient
   devices: Device[]
 }
@@ -28,12 +28,12 @@ export enum MessageSource {
   App_Android = 4
 }
 
-export interface TMessage<TMessageData> {
+export interface Message<T> {
   cmdId: number
   name: string
   time: number
   from: MessageSource
-  data: TMessageData
+  data: T
   sig: string
 }
 
@@ -99,7 +99,7 @@ export class Airmx {
   #client: MqttClient
 
   constructor(
-    private readonly config: TConfig
+    private readonly config: Config
   ) {
     this.#client = this.config.mqtt
     this.#client.on('connect', this.#handleConnect.bind(this))
