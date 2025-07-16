@@ -1,4 +1,4 @@
-import { Command, Message, SnowStatusData, BatteryState, SensorState } from './types'
+import { Command, Message, SnowStatusData, BatteryState, SensorState } from './types.js'
 
 export class SnowStatus {
   constructor(

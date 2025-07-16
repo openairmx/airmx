@@ -1,6 +1,6 @@
 import type { MqttClient } from 'mqtt'
-import type { EagleStatus } from './eagle'
-import type { SnowStatus } from './snow'
+import type { EagleStatus } from './eagle.js'
+import type { SnowStatus } from './snow.js'
 
 export interface Config {
   mqtt: MqttClient

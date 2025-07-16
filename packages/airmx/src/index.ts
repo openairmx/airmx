@@ -1,3 +1,3 @@
-export * from './airmx'
-export * from './snow'
-export * from './eagle'
+export * from './airmx.js'
+export * from './snow.js'
+export * from './eagle.js'

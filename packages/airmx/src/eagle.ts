@@ -1,4 +1,4 @@
-import { Message, EagleStatusData, EagleMode } from './types'
+import { Message, EagleStatusData, EagleMode } from './types.js'
 
 export class EagleStatus {
   constructor(

@@ -1,5 +1,5 @@
-import { EagleStatus } from './eagle'
-import { EagleMode, EagleStatusData } from './types'
+import { EagleStatus } from './eagle.js'
+import { EagleMode, EagleStatusData } from './types.js'
 
 test('from parses message to eagle status', () => {
   const status = EagleStatus.from(12345, createStubStatusData())

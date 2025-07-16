@@ -1,13 +1,13 @@
 import crypto from 'crypto'
 import { MqttClient } from 'mqtt'
-import { EagleStatus } from './eagle'
-import { SnowStatus } from './snow'
+import { EagleStatus } from './eagle.js'
+import { SnowStatus } from './snow.js'
 import {
   Config,
   Command,
   SnowListener,
   EagleListener
-} from './types'
+} from './types.js'
 
 export class Topic {
   constructor(

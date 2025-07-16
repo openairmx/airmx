@@ -1,4 +1,4 @@
-import { MqttClient } from 'mqtt/*'
+import { MqttClient } from 'mqtt'
 import { Airmx, Topic } from './airmx'
 
 describe('topic', () => {
