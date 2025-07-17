@@ -99,3 +99,11 @@ export interface SnowStatusData {
   version: string
   version_type: 'release'
 }
+
+export interface EagleControlData {
+  power: 0 | 1
+  heatStatus: 0 | 1
+  mode: number
+  cadr: number
+  denoise: 0 | 1
+}

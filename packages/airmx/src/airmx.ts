@@ -1,9 +1,11 @@
 import crypto from 'crypto'
 import { MqttClient } from 'mqtt'
-import { EagleStatus } from './eagle.js'
+import { EagleControlMesasge, EagleStatus } from './eagle.js'
 import { SnowStatus } from './snow.js'
-import type { Config, SnowListener, EagleListener } from './types.js'
+import type { Config, SnowListener, EagleListener, EagleControlData } from './types.js'
 import { Command } from './types.js'
+import { Signer } from './util.js'
+import type { CommandMessage } from './message.js'
 
 export class Topic {
   constructor(
@@ -64,12 +66,15 @@ export class Airmx {
 
   #client: MqttClient
 
+  #signer
+
   constructor(
     private readonly config: Config
   ) {
     this.#client = this.config.mqtt
     this.#client.on('connect', this.#handleConnect.bind(this))
     this.#client.on('message', this.#handleMessage.bind(this))
+    this.#signer = new Signer()
   }
 
   onSnowUpdate(callback: SnowListener) {
@@ -118,10 +123,7 @@ export class Airmx {
   }
 
   #validateMessage(deviceId: number, message: string, sig: string) {
-    const device = this.config.devices.find((device) => device.id === deviceId)
-    if (device === undefined) {
-      throw new Error(`Could not find the device with ID ${deviceId}.`)
-    }
+    const device = this.#getDevice(deviceId)
     const plainText = message.slice(1, message.lastIndexOf('"sig"'))
     const calculated = crypto.createHash('md5')
       .update(plainText)
@@ -130,5 +132,24 @@ export class Airmx {
     if (calculated !== sig) {
       throw new Error('Failed to validate the message.')
     }
+  }
+
+  control(deviceId: number, data: EagleControlData) {
+    this.#dispatch(deviceId, EagleControlMesasge.make(data))
+  }
+
+  #dispatch(deviceId: number, message: CommandMessage<unknown>) {
+    const device = this.#getDevice(deviceId)
+    const sig = this.#signer.sign(message, device.key)
+    const payload = { ...message.payload(), sig }
+    this.#client.publish(`airmx/01/1/1/0/1/${deviceId}`, JSON.stringify(payload))
+  }
+
+  #getDevice(deviceId: number) {
+    const device = this.config.devices.find((device) => device.id === deviceId)
+    if (device === undefined) {
+      throw new Error(`Could not find the device with ID ${deviceId}.`)
+    }
+    return device
   }
 }
