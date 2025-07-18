@@ -99,24 +99,18 @@ export class Airmx {
   }
 
   #handleMessage(topic: string, message: Buffer): void {
-    let t: Topic
-
-    try {
-      t = Topic.parse(topic)
-    } catch (e) {
-      return
-    }
+    const { deviceId } = Topic.parse(topic)
 
     const str = message.toString()
     const data = JSON.parse(str)
-    this.#validateMessage(t.deviceId, str, data.sig)
+    this.#validateMessage(deviceId, str, data.sig)
 
     switch (data.cmdId) {
       case SnowStatus.commandId():
-        this.#notifySnow(SnowStatus.from(t.deviceId, data))
+        this.#notifySnow(SnowStatus.from(deviceId, data))
         break
       case EagleStatus.commandId():
-        this.#notifyEagle(EagleStatus.from(t.deviceId, data))
+        this.#notifyEagle(EagleStatus.from(deviceId, data))
         break
     }
   }
