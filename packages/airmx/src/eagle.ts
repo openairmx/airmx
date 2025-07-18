@@ -1,6 +1,5 @@
-import { CommandMessage } from './message.js'
-import type { Message, EagleStatusData, EagleControlData } from './types.js'
-import { EagleMode, MessageSource } from './types.js'
+import type { Message, EagleStatusData } from './types.js'
+import { EagleMode } from './types.js'
 
 export class EagleStatus {
   constructor(
@@ -102,14 +101,5 @@ export class EagleStatus {
 
   get version() {
     return this.message.data.version
-  }
-}
-
-export class EagleControlMesasge extends CommandMessage<EagleControlData> {
-  static make(data: EagleControlData) {
-    const timestamp = Math.floor(new Date().getTime() / 1000)
-    return new EagleControlMesasge(
-      100, 'control', data, timestamp, MessageSource.App_Android
-    )
   }
 }

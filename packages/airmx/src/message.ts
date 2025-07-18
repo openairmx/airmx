@@ -1,4 +1,4 @@
-import type { InstantPushData } from './types.js'
+import type { EagleControlData, InstantPushData } from './types.js'
 import { MessageSource } from './types.js'
 
 export class CommandMessage<T> {
@@ -41,6 +41,19 @@ export class InstantPushMessage extends CommandMessage<InstantPushData> {
     }
     return new InstantPushMessage(
       this.commandId(), 'instantPush', data, current(), MessageSource.App_Android
+    )
+  }
+}
+
+export class EagleControlMesasge extends CommandMessage<EagleControlData> {
+  static commandId() {
+    return 100
+  }
+
+  static make(data: EagleControlData) {
+    const timestamp = Math.floor(new Date().getTime() / 1000)
+    return new EagleControlMesasge(
+      this.commandId(), 'control', data, timestamp, MessageSource.App_Android
     )
   }
 }

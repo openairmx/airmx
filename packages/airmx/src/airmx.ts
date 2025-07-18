@@ -1,6 +1,7 @@
 import crypto from 'crypto'
 import { MqttClient } from 'mqtt'
-import { EagleControlMesasge, EagleStatus } from './eagle.js'
+import { EagleStatus } from './eagle.js'
+import { EagleControlMesasge } from './message.js'
 import { SnowStatus } from './snow.js'
 import type { Config, SnowListener, EagleListener, EagleControlData } from './types.js'
 import { Command } from './types.js'
