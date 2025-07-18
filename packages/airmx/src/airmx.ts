@@ -10,7 +10,7 @@ import type {
 import type { CommandMessage } from './messages.js'
 
 import { EagleControlMesasge } from './messages.js'
-import { EagleStatus } from './eagle.js'
+import { EagleController, EagleStatus } from './eagle.js'
 import { Signer } from './util.js'
 import { SnowStatus } from './snow.js'
 
@@ -168,5 +168,15 @@ export class Airmx {
 
   getEagleStatus(deviceId: number) {
     return this.#eagles.get(deviceId)
+  }
+
+  /**
+   * Specify an AIRMX Pro device.
+   *
+   * @param deviceId - The device ID.
+   * @returns The device controller.
+   */
+  device(deviceId: number) {
+    return new EagleController(this, deviceId)
   }
 }

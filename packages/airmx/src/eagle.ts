@@ -1,4 +1,6 @@
-import type { Message, EagleStatusData } from './types.js'
+import type { Message, EagleStatusData, EagleControlData } from './types.js'
+
+import { Airmx } from './airmx.js'
 import { EagleMode } from './types.js'
 
 export class EagleStatus {
@@ -107,5 +109,99 @@ export class EagleStatus {
 
   get version() {
     return this.message.data.version
+  }
+
+  toControlData(): EagleControlData {
+    const { power, heatStatus, mode, cadr, denoise } = this.message.data
+    return { power, heatStatus, mode, cadr, denoise }
+  }
+}
+
+export class EagleController {
+  constructor(
+    private readonly airmx: Airmx,
+    private readonly deviceId: number,
+  ) {}
+
+  on() {
+    this.#send({ power: 1 })
+  }
+
+  off() {
+    this.#send({ power: 0 })
+  }
+
+  heatOn() {
+    this.#send({ heatStatus: 1 })
+  }
+
+  heatOff() {
+    this.#send({ heatStatus: 0 })
+  }
+
+  denoiseOn() {
+    this.#send({ denoise: 1 })
+  }
+
+  denoiseOff() {
+    this.#send({ denoise: 0 })
+  }
+
+  cadr(cadr: number) {
+    this.#send({
+      power: 1,
+      mode: EagleMode.Manual,
+      cadr,
+    })
+  }
+
+  /**
+   * Automate the fan speed based on the data from the air monitor.
+   */
+  ai() {
+    this.#send({
+      power: 1,
+      mode: EagleMode.Ai,
+    })
+  }
+
+  /**
+   * Activate silent mode to minimize fan noise.
+   */
+  silent() {
+    this.#send({
+      power: 1,
+      mode: EagleMode.Silent,
+    })
+  }
+
+  /**
+   * Activate turbo mode for optimum air purification.
+   */
+  turbo() {
+    this.#send({
+      power: 1,
+      mode: EagleMode.Turbo,
+      cadr: 100,
+    })
+  }
+
+  status() {
+    const status = this.airmx.getEagleStatus(this.deviceId)
+
+    if (status === undefined) {
+      throw new Error(
+        `Could not retrieve the status of the device with ID ${this.deviceId}.`,
+      )
+    }
+
+    return status
+  }
+
+  #send(data: Partial<EagleControlData>) {
+    this.airmx.control(this.deviceId, {
+      ...this.status().toControlData(),
+      ...data,
+    })
   }
 }

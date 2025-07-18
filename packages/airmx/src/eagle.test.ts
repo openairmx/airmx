@@ -1,5 +1,7 @@
+import type { Message, EagleStatusData } from './types.js'
+
 import { EagleStatus } from './eagle.js'
-import { EagleMode, EagleStatusData } from './types.js'
+import { EagleMode } from './types.js'
 
 test('from parses message to eagle status', () => {
   const status = EagleStatus.from(12345, createStubStatusData())
@@ -70,7 +72,9 @@ test('isHeaterOff determines if the heater is off', () => {
   expect(status.isHeaterOn()).toBe(false)
 })
 
-const createStubStatusData = (data: Partial<EagleStatusData> = {}) => ({
+const createStubStatusData = (
+  data: Partial<EagleStatusData> = {},
+): Message<EagleStatusData> => ({
   cmdId: 210,
   data: {
     cadr: 17,

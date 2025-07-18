@@ -31,13 +31,20 @@ export interface Message<T> {
   sig: string
 }
 
+export enum EagleMode {
+  Manual = 0,
+  Ai,
+  Silent,
+  Turbo,
+}
+
 export interface EagleStatusData {
   version: string
-  power: number
-  mode: number
+  power: 0 | 1
+  mode: EagleMode
   status: number
-  denoise: number
-  heatStatus: number
+  denoise: 0 | 1
+  heatStatus: 0 | 1
   cadr: number
   prm: number
   diffPressure1: number
@@ -49,10 +56,6 @@ export interface EagleStatusData {
   carbonPercent: number
   hepaId: string
   hepaPercent: number
-}
-
-export enum EagleMode {
-  Silent = 2,
 }
 
 export enum SensorState {
