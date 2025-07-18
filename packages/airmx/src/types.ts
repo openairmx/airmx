@@ -104,11 +104,11 @@ export interface SnowStatusData {
 }
 
 export interface EagleControlData {
-  power: 0 | 1
-  heatStatus: 0 | 1
-  mode: number
+  power: Switch
+  heatStatus: Switch
+  mode: EagleMode
   cadr: number
-  denoise: 0 | 1
+  denoise: Switch
 }
 
 export interface InstantPushData {
