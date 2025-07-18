@@ -31,6 +31,11 @@ export interface Message<T> {
   sig: string
 }
 
+export enum Switch {
+  Off = 0,
+  On,
+}
+
 export enum EagleMode {
   Manual = 0,
   Ai,
@@ -40,11 +45,11 @@ export enum EagleMode {
 
 export interface EagleStatusData {
   version: string
-  power: 0 | 1
+  power: Switch
   mode: EagleMode
   status: number
-  denoise: 0 | 1
-  heatStatus: 0 | 1
+  denoise: Switch
+  heatStatus: Switch
   cadr: number
   prm: number
   diffPressure1: number

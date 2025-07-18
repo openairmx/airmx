@@ -1,7 +1,7 @@
 import type { Message, EagleStatusData, EagleControlData } from './types.js'
 
 import { Airmx } from './airmx.js'
-import { EagleMode } from './types.js'
+import { EagleMode, Switch } from './types.js'
 
 export class EagleStatus {
   constructor(
@@ -28,7 +28,7 @@ export class EagleStatus {
   }
 
   isOn() {
-    return this.power === 1
+    return this.power === Switch.On
   }
 
   isOff() {
@@ -52,7 +52,7 @@ export class EagleStatus {
   }
 
   isDenoiseOn() {
-    return this.denoise === 1
+    return this.denoise === Switch.On
   }
 
   isDenoiseOff() {
@@ -64,7 +64,7 @@ export class EagleStatus {
   }
 
   isHeaterOn() {
-    return this.heatStatus === 1
+    return this.heatStatus === Switch.On
   }
 
   isHeaterOff() {
@@ -124,32 +124,32 @@ export class EagleController {
   ) {}
 
   on() {
-    this.#send({ power: 1 })
+    this.#send({ power: Switch.On })
   }
 
   off() {
-    this.#send({ power: 0 })
+    this.#send({ power: Switch.Off })
   }
 
   heatOn() {
-    this.#send({ heatStatus: 1 })
+    this.#send({ heatStatus: Switch.On })
   }
 
   heatOff() {
-    this.#send({ heatStatus: 0 })
+    this.#send({ heatStatus: Switch.Off })
   }
 
   denoiseOn() {
-    this.#send({ denoise: 1 })
+    this.#send({ denoise: Switch.On })
   }
 
   denoiseOff() {
-    this.#send({ denoise: 0 })
+    this.#send({ denoise: Switch.Off })
   }
 
   cadr(cadr: number) {
     this.#send({
-      power: 1,
+      power: Switch.On,
       mode: EagleMode.Manual,
       cadr,
     })
@@ -160,7 +160,7 @@ export class EagleController {
    */
   ai() {
     this.#send({
-      power: 1,
+      power: Switch.On,
       mode: EagleMode.Ai,
     })
   }
@@ -170,7 +170,7 @@ export class EagleController {
    */
   silent() {
     this.#send({
-      power: 1,
+      power: Switch.On,
       mode: EagleMode.Silent,
     })
   }
@@ -180,7 +180,7 @@ export class EagleController {
    */
   turbo() {
     this.#send({
-      power: 1,
+      power: Switch.On,
       mode: EagleMode.Turbo,
       cadr: 100,
     })
