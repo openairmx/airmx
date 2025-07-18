@@ -9,7 +9,7 @@ import type {
 } from './types.js'
 import type { CommandMessage } from './messages.js'
 
-import { EagleControlMesasge } from './messages.js'
+import { EagleControlMesasge, InstantPushMessage } from './messages.js'
 import { EagleController, EagleStatus } from './eagle.js'
 import { Signer } from './util.js'
 import { SnowStatus } from './snow.js'
@@ -102,6 +102,11 @@ export class Airmx {
 
   #handleConnect() {
     this.#client.subscribe('airmx/01/+/+/1/1/+')
+
+    // After successfully connecting to the MQTT server, we need to retrieve
+    // the latest statuses for all devices instead of waiting for them to
+    // notify us. It also enables us to make partial tweaks to devices.
+    this.#dispatchAll(InstantPushMessage.make(2, 1))
   }
 
   #handleMessage(topic: string, message: Buffer): void {
@@ -156,6 +161,12 @@ export class Airmx {
       `airmx/01/1/1/0/1/${deviceId}`,
       JSON.stringify(payload),
     )
+  }
+
+  #dispatchAll(message: CommandMessage<unknown>) {
+    for (const device of this.config.devices) {
+      this.#dispatch(device.id, message)
+    }
   }
 
   #getDevice(deviceId: number) {
