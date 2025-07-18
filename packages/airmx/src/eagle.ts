@@ -13,7 +13,9 @@ export class EagleStatus {
 
   static from(deviceId: number, message: Message<EagleStatusData>) {
     if (message.cmdId !== this.commandId()) {
-      throw new Error(`Eagle status expects a message with command ID ${this.commandId()}.`)
+      throw new Error(
+        `Eagle status expects a message with command ID ${this.commandId()}.`,
+      )
     }
 
     return new this(deviceId, message)
