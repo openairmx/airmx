@@ -7,7 +7,7 @@ export class CommandMessage<T> {
     readonly commandName: string,
     readonly data: T,
     readonly time: number,
-    readonly from: number
+    readonly from: number,
   ) {}
 
   payload() {
@@ -37,10 +37,14 @@ export class InstantPushMessage extends CommandMessage<InstantPushData> {
   static make(frequency: number, duration: number) {
     const data = {
       frequencyTime: frequency,
-      durationTime: duration
+      durationTime: duration,
     }
     return new InstantPushMessage(
-      this.commandId(), 'instantPush', data, current(), MessageSource.App_Android
+      this.commandId(),
+      'instantPush',
+      data,
+      current(),
+      MessageSource.App_Android,
     )
   }
 }
@@ -53,7 +57,11 @@ export class EagleControlMesasge extends CommandMessage<EagleControlData> {
   static make(data: EagleControlData) {
     const timestamp = Math.floor(new Date().getTime() / 1000)
     return new EagleControlMesasge(
-      this.commandId(), 'control', data, timestamp, MessageSource.App_Android
+      this.commandId(),
+      'control',
+      data,
+      timestamp,
+      MessageSource.App_Android,
     )
   }
 }

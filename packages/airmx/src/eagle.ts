@@ -4,7 +4,7 @@ import { EagleMode } from './types.js'
 export class EagleStatus {
   constructor(
     public readonly deviceId: number,
-    public readonly message: Message<EagleStatusData>
+    public readonly message: Message<EagleStatusData>,
   ) {}
 
   static from(deviceId: number, message: Message<EagleStatusData>) {
@@ -24,7 +24,7 @@ export class EagleStatus {
   }
 
   isOff() {
-    return ! this.isOn()
+    return !this.isOn()
   }
 
   get mode() {
@@ -48,7 +48,7 @@ export class EagleStatus {
   }
 
   isDenoiseOff() {
-    return ! this.isDenoiseOn()
+    return !this.isDenoiseOn()
   }
 
   get heatStatus() {
@@ -60,7 +60,7 @@ export class EagleStatus {
   }
 
   isHeaterOff() {
-    return ! this.isHeaterOn()
+    return !this.isHeaterOn()
   }
 
   get cadr() {

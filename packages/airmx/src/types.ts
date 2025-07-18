@@ -17,14 +17,14 @@ export type EagleListener = (status: EagleStatus) => void
 
 export enum Command {
   SnowStatus = 200,
-  EagleStatus = 210
+  EagleStatus = 210,
 }
 
 export enum MessageSource {
   Snow = 1,
   Eagle = 2,
   App_iOS = 3,
-  App_Android = 4
+  App_Android = 4,
 }
 
 export interface Message<T> {
@@ -45,9 +45,9 @@ export interface EagleStatusData {
   heatStatus: number
   cadr: number
   prm: number
-  diffPressure1: number,
-  diffPressure2: number,
-  t0: number,
+  diffPressure1: number
+  diffPressure2: number
+  t0: number
   g4Id: string
   g4Percent: number
   carbonId: string
@@ -57,16 +57,16 @@ export interface EagleStatusData {
 }
 
 export enum EagleMode {
-  Silent = 2
+  Silent = 2,
 }
 
 export enum SensorState {
-  Sampling = 'sampling'
+  Sampling = 'sampling',
 }
 
 export enum BatteryState {
   Charging = 'charging',
-  Discharge = 'discharge'
+  Discharge = 'discharge',
 }
 
 export interface SnowStatusData {

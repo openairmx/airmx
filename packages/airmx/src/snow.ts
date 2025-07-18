@@ -1,16 +1,24 @@
-import { Command, type Message, type SnowStatusData, BatteryState, SensorState } from './types.js'
+import {
+  Command,
+  type Message,
+  type SnowStatusData,
+  BatteryState,
+  SensorState,
+} from './types.js'
 
 export class SnowStatus {
   constructor(
     public readonly deviceId: number,
-    public readonly message: Message<SnowStatusData>
+    public readonly message: Message<SnowStatusData>,
   ) {
     //
   }
 
   static from(deviceId: number, message: Message<SnowStatusData>) {
     if (message.cmdId !== Command.SnowStatus) {
-      throw new Error(`Snow status expects a message with command ID "${Command.SnowStatus}".`)
+      throw new Error(
+        `Snow status expects a message with command ID "${Command.SnowStatus}".`,
+      )
     }
 
     return new this(deviceId, message)

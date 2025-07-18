@@ -39,7 +39,10 @@ test('isOff determines if the power is off', () => {
 })
 
 test('mode 2 is the silent mode', () => {
-  const status = new EagleStatus(12345, createStubStatusData({ mode: EagleMode.Silent }))
+  const status = new EagleStatus(
+    12345,
+    createStubStatusData({ mode: EagleMode.Silent }),
+  )
   expect(status.isSilentMode()).toBe(true)
 })
 
@@ -71,26 +74,26 @@ const createStubStatusData = (data: Partial<EagleStatusData> = {}) => ({
   cmdId: 210,
   data: {
     cadr: 17,
-    carbonId: "0222222",
+    carbonId: '0222222',
     carbonPercent: 30,
     denoise: 0,
     diffPressure1: 99999,
     diffPressure2: 99999,
-    g4Id: "0111111",
+    g4Id: '0111111',
     g4Percent: 20,
     heatStatus: 0,
-    hepaId: "0333333",
+    hepaId: '0333333',
     hepaPercent: 40,
     mode: 2,
     power: 1,
     prm: 660,
     status: 0,
     t0: 28,
-    version: "10.00.17",
-    ...data
+    version: '10.00.17',
+    ...data,
   },
   from: 2,
-  name: "eagleStatus",
-  sig: "foo",
-  time: 1700000000
+  name: 'eagleStatus',
+  sig: 'foo',
+  time: 1700000000,
 })

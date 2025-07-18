@@ -3,7 +3,12 @@ import { MqttClient } from 'mqtt'
 import { EagleStatus } from './eagle.js'
 import { EagleControlMesasge } from './messages.js'
 import { SnowStatus } from './snow.js'
-import type { Config, SnowListener, EagleListener, EagleControlData } from './types.js'
+import type {
+  Config,
+  SnowListener,
+  EagleListener,
+  EagleControlData,
+} from './types.js'
 import { Command } from './types.js'
 import { Signer } from './util.js'
 import type { CommandMessage } from './messages.js'
@@ -14,7 +19,7 @@ export class Topic {
     public readonly unknown2: boolean,
     public readonly unknown3: boolean,
     public readonly unknown4: boolean,
-    public readonly deviceId: number
+    public readonly deviceId: number,
   ) {
     //
   }
@@ -36,13 +41,15 @@ export class Topic {
 
     for (let i = 2; i < 6; i++) {
       if (components[i] !== '0' && components[i] !== '1') {
-        const ordinal = `${i + 1}${(i + 1) === 3 ? 'rd' : 'th'}`
-        throw new Error(`The ${ordinal} part of the topic must be either "1" or "0".`)
+        const ordinal = `${i + 1}${i + 1 === 3 ? 'rd' : 'th'}`
+        throw new Error(
+          `The ${ordinal} part of the topic must be either "1" or "0".`,
+        )
       }
     }
 
     const deviceId = components[6]
-    if (deviceId === '' || ! /^\d+$/.test(deviceId)) {
+    if (deviceId === '' || !/^\d+$/.test(deviceId)) {
       throw new Error('The 7th part of the topic must be a device ID.')
     }
 
@@ -51,27 +58,25 @@ export class Topic {
       components[3] === '1',
       components[4] === '1',
       components[5] === '1',
-      +deviceId
+      +deviceId,
     )
   }
 }
 
 export class Airmx {
   #listeners: {
-    eagle: EagleListener[],
+    eagle: EagleListener[]
     snow: SnowListener[]
   } = {
     eagle: [],
-    snow: []
+    snow: [],
   }
 
   #client: MqttClient
 
   #signer
 
-  constructor(
-    private readonly config: Config
-  ) {
+  constructor(private readonly config: Config) {
     this.#client = this.config.mqtt
     this.#client.on('connect', this.#handleConnect.bind(this))
     this.#client.on('message', this.#handleMessage.bind(this))
@@ -126,7 +131,8 @@ export class Airmx {
   #validateMessage(deviceId: number, message: string, sig: string) {
     const device = this.#getDevice(deviceId)
     const plainText = message.slice(1, message.lastIndexOf('"sig"'))
-    const calculated = crypto.createHash('md5')
+    const calculated = crypto
+      .createHash('md5')
       .update(plainText)
       .update(device.key)
       .digest('hex')
@@ -143,7 +149,10 @@ export class Airmx {
     const device = this.#getDevice(deviceId)
     const sig = this.#signer.sign(message, device.key)
     const payload = { ...message.payload(), sig }
-    this.#client.publish(`airmx/01/1/1/0/1/${deviceId}`, JSON.stringify(payload))
+    this.#client.publish(
+      `airmx/01/1/1/0/1/${deviceId}`,
+      JSON.stringify(payload),
+    )
   }
 
   #getDevice(deviceId: number) {
