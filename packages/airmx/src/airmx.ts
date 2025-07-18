@@ -1,4 +1,3 @@
-import crypto from 'crypto'
 import { MqttClient } from 'mqtt'
 
 import type {
@@ -138,12 +137,8 @@ export class Airmx {
 
   #validateMessage(deviceId: number, message: string, sig: string) {
     const device = this.#getDevice(deviceId)
-    const plainText = message.slice(1, message.lastIndexOf('"sig"'))
-    const calculated = crypto
-      .createHash('md5')
-      .update(plainText)
-      .update(device.key)
-      .digest('hex')
+    const plainText = message.slice(1, message.lastIndexOf(',"sig"'))
+    const calculated = this.#signer.signText(plainText, device.key)
     if (calculated !== sig) {
       throw new Error('Failed to validate the message.')
     }
