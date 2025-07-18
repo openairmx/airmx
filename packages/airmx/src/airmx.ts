@@ -77,11 +77,15 @@ export class Airmx {
 
   #signer
 
+  /** Pairs of device ID and its latest running status. */
+  #eagles
+
   constructor(private readonly config: Config) {
     this.#client = this.config.mqtt
     this.#client.on('connect', this.#handleConnect.bind(this))
     this.#client.on('message', this.#handleMessage.bind(this))
     this.#signer = new Signer()
+    this.#eagles = new Map<number, EagleStatus>()
   }
 
   onSnowUpdate(callback: SnowListener) {
@@ -110,7 +114,9 @@ export class Airmx {
         this.#notifySnow(SnowStatus.from(deviceId, data))
         break
       case EagleStatus.commandId():
-        this.#notifyEagle(EagleStatus.from(deviceId, data))
+        const status = EagleStatus.from(deviceId, data)
+        this.#eagles.set(deviceId, status)
+        this.#notifyEagle(status)
         break
     }
   }
@@ -156,5 +162,9 @@ export class Airmx {
       throw new Error(`Could not find the device with ID ${deviceId}.`)
     }
     return device
+  }
+
+  getEagleStatus(deviceId: number) {
+    return this.#eagles.get(deviceId)
   }
 }

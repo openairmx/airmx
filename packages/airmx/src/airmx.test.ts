@@ -1,5 +1,6 @@
 import { MqttClient } from 'mqtt'
 import { Airmx, Topic } from './airmx.js'
+import { EagleStatus } from './eagle.js'
 
 describe('topic', () => {
   test('parse parses topic from string', () => {
@@ -93,6 +94,22 @@ describe('airmx', () => {
     )?.[1] as (() => void) | undefined
     connectHandler?.()
     expect(mockMqttClient.subscribe).toHaveBeenCalledWith('airmx/01/+/+/1/1/+')
+  })
+
+  it('should record the latest status for eagles', () => {
+    const testDevice = { id: 1, key: 'f0eb21fe346c88e1d1ac73546022cd5d' }
+    const message =
+      '{"cmdId": 210,"name":"eagleStatus","time":1752675701,"from":2,"data":{"version":"10.00.17","power":1,"heatStatus":0,"mode":0,"cadr":47,"prm":1320,"g4Percent": 100,"hepaPercent":100,"carbonId":"031","g4Id":"041","hepaId":"021","carbonPercent":17,"diffPressure1":99999,"diffPressure2":99999,"t0":35,"status":0,"denoise":1},"sig":"b8796682da77e8c929dddf7e6461afec"}'
+
+    const airmx = new Airmx({ mqtt: mockMqttClient, devices: [testDevice] })
+    const messageHandler = mockMqttClient.on.mock.calls.find(
+      ([event]) => event === 'message',
+    )?.[1] as ((topic: string, message: Buffer) => void) | undefined
+    expect(messageHandler).toBeDefined()
+
+    messageHandler!('airmx/01/0/1/1/1/1', Buffer.from(message))
+    const status = airmx.getEagleStatus(1)
+    expect(status).toBeInstanceOf(EagleStatus)
   })
 
   describe('message validation', () => {
