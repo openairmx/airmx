@@ -1,12 +1,12 @@
 import crypto from 'crypto'
 import { MqttClient } from 'mqtt'
 import { EagleStatus } from './eagle.js'
-import { EagleControlMesasge } from './message.js'
+import { EagleControlMesasge } from './messages.js'
 import { SnowStatus } from './snow.js'
 import type { Config, SnowListener, EagleListener, EagleControlData } from './types.js'
 import { Command } from './types.js'
 import { Signer } from './util.js'
-import type { CommandMessage } from './message.js'
+import type { CommandMessage } from './messages.js'
 
 export class Topic {
   constructor(

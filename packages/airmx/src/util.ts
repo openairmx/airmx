@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import type { CommandMessage } from './message.js'
+import type { CommandMessage } from './messages.js'
 
 export class Signer {
   sign(message: CommandMessage<unknown>, key: string) {
