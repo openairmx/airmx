@@ -107,3 +107,8 @@ export interface EagleControlData {
   cadr: number
   denoise: 0 | 1
 }
+
+export interface InstantPushData {
+  frequencyTime: number
+  durationTime: number
+}
