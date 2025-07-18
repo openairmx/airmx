@@ -64,11 +64,13 @@ export class Topic {
   }
 }
 
+interface AirmxListeners {
+  eagle: EagleListener[]
+  snow: SnowListener[]
+}
+
 export class Airmx {
-  #listeners: {
-    eagle: EagleListener[]
-    snow: SnowListener[]
-  } = {
+  #listeners: AirmxListeners = {
     eagle: [],
     snow: [],
   }
