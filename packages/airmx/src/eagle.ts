@@ -7,9 +7,13 @@ export class EagleStatus {
     public readonly message: Message<EagleStatusData>,
   ) {}
 
+  static commandId() {
+    return 210
+  }
+
   static from(deviceId: number, message: Message<EagleStatusData>) {
-    if (message.cmdId !== 210) {
-      throw new Error('Eagle status expects a message with command ID 210.')
+    if (message.cmdId !== this.commandId()) {
+      throw new Error(`Eagle status expects a message with command ID ${this.commandId()}.`)
     }
 
     return new this(deviceId, message)

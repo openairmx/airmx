@@ -1,5 +1,4 @@
 import {
-  Command,
   type Message,
   type SnowStatusData,
   BatteryState,
@@ -14,10 +13,14 @@ export class SnowStatus {
     //
   }
 
+  static commandId() {
+    return 200
+  }
+
   static from(deviceId: number, message: Message<SnowStatusData>) {
-    if (message.cmdId !== Command.SnowStatus) {
+    if (message.cmdId !== this.commandId()) {
       throw new Error(
-        `Snow status expects a message with command ID "${Command.SnowStatus}".`,
+        `Snow status expects a message with command ID "${this.commandId()}".`,
       )
     }
 

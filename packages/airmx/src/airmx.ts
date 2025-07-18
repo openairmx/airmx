@@ -9,7 +9,6 @@ import type {
   EagleListener,
   EagleControlData,
 } from './types.js'
-import { Command } from './types.js'
 import { Signer } from './util.js'
 import type { CommandMessage } from './messages.js'
 
@@ -111,10 +110,10 @@ export class Airmx {
     this.#validateMessage(t.deviceId, str, data.sig)
 
     switch (data.cmdId) {
-      case Command.SnowStatus:
+      case SnowStatus.commandId():
         this.#notifySnow(SnowStatus.from(t.deviceId, data))
         break
-      case Command.EagleStatus:
+      case EagleStatus.commandId():
         this.#notifyEagle(EagleStatus.from(t.deviceId, data))
         break
     }

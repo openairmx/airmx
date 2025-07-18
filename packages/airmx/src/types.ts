@@ -15,11 +15,6 @@ export interface Device {
 export type SnowListener = (status: SnowStatus) => void
 export type EagleListener = (status: EagleStatus) => void
 
-export enum Command {
-  SnowStatus = 200,
-  EagleStatus = 210,
-}
-
 export enum MessageSource {
   Snow = 1,
   Eagle = 2,
