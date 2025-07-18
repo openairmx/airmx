@@ -1,9 +1,5 @@
-import {
-  type Message,
-  type SnowStatusData,
-  BatteryState,
-  SensorState,
-} from './types.js'
+import type { Message, SnowStatusData } from './types.js'
+import { BatteryState, SensorState } from './types.js'
 
 export class SnowStatus {
   constructor(
