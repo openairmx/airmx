@@ -1,131 +1,149 @@
-# Control AIRMX Pro 1S with Javascript
+# Control AIRMX Pro with JavaScript
 
-This package uses the MQTT protocol to communicate with your AIRMX machine.
-However, some prerequisites must be met for this communication to work.
-Because the AIRMX machine doesn't have built-in support for extending
-connections, we need to intercept network packets to obtain the machine ID
-and access token. Furthermore, network firewall rules are required to redirect
-packets from the AIRMX machine to our computing platform.
+The package utilizes the MQTT protocol to communicate with your AIRMX devices.
+Once connected to the server, it constantly monitors the status updates from
+your machines. Additionally, it provides a set of useful APIs to facilitate
+smooth control of your devices.
 
 ## Installation
 
 The package can be installed via NPM:
 
 ```bash
-npm i @lizhineng/airmx
+npm i airmx
 ```
 
 ## Usage
 
-### Setup
-
-First of all, we need to initialize an AIRMX client before we can
-communicate with our machine:
+First of all, we need to initialize an AIRMX client before we can monitor or
+control our machines:
 
 ```typescript
+import mqtt from 'mqtt'
+
 const airmx = new Airmx({
-    mqtt: {
-        // MQTT server configuration
-    },
-    machines: [
-        {
-            machineId: 1234, // Your machine ID
-            token: '<YOUR-ACCESS-TOKEN>', // The access token
-        }
-    ]
+  mqtt: mqtt.connect('mqtt://<YOUR-MQTT-SERVER>'),
+  devices: [
+    { id: <YOUR-DEVICE-ID>, key: '<YOUR-DEVICE-KEY>' }
+  ]
 })
 ```
 
-If you only need to monitor your machines and don't intend to control them,
-you can skip the entire "machines" setting.
-
-### Control
-
-The package exposes a list of APIs to control the machine effortlessly.
-
-Turn the machine on:
+You can register a handler when an AIRMX Pro sends us its latest status.
 
 ```typescript
-airmx.on()
+airmx.onEagleUpdate((status: EagleStatus) => {
+  console.log(`🎈 AIRMX: ${status.deviceId}  ${status.power ? 'on' : 'off'}`)
+})
 ```
 
-Turn the machine off:
+Sending commands directly to your machines is simple with the control API.
+Just provide the device ID and control data.
 
 ```typescript
-airmx.off()
+airmx.control(1, {
+  power: 1,      // 1 indicates on
+  mode: 0,       // 0 indicates manual control
+  cadr: 47,      // CADR accepts a number range from 0 - 100
+  denoise: 0,    // 0 indicates off
+  heatStatus: 0  // 0 indicates off
+})
 ```
 
-Control the fan speed:
+Dealing with the control API's fixed data structure can be tedious. That's
+why we built a semantic and fluent API for easier device control. Its method
+names are so intuitive, you'll instantly grasp their function.
 
 ```typescript
-airmx.setFanByCidr(cidr: number)
-airmx.setFanByPercentage(percentage: number)
-airmx.setAutoFan()
+// Turn on the machine
+airmx.device(1).on()
+
+// Turn off the machine
+airmx.device(1).off()
+
+// Turn on heat mode
+airmx.device(1).heatOn()
+
+// Turn off heat mode
+airmx.device(1).heatOff()
+
+// Turn on noise cancelling mode
+airmx.device(1).denoiseOn()
+
+// Turn off noise cancelling mode
+airmx.device(1).denoiseOff()
+
+// Adjust the CADR value (fan speed)
+airmx.device(1).cadr(47)
 ```
 
-Control the AUX heat:
+The library replicates the built-in modes available in the official mobile
+applications:
+
+- **AI Mode:** Automatically adjusts CADR (Clean Air Delivery Rate) based
+    on data from a paired air monitor.
+- **Silent Mode:** Reduces fan speed to minimize noise output.
+- **Turbo Mode:** Maximizes the device's purification capability, operating
+    at 100% fan speed for rapid air cleaning.
 
 ```typescript
-airmx.setAuxHeat(heat: boolean)
+airmx.device(1).ai()
+airmx.device(1).slient()
+airmx.device(1).turbo()
 ```
 
-Control the denose function:
+Whenever a device sends an update or you request its current state, you'll
+get an EagleStatus object with all the latest information.
 
 ```typescript
-airmx.setDenoise(denose: boolean)
+airmx.device(1).status()
 ```
 
-### Monitor
-
-Get the running status of the machine through the status properties:
+## AIRMX Pro Status Reference
 
 ```typescript
-// Determine if the machine power is on
+// Determine the device's power status
 //
 // Data type: boolean
 
-airmx.status.on
+status.isOn()
+status.isOff()
 
-// Determine if the machine power is off
+// Determine if the machine is set to silent mode
 //
 // Data type: boolean
 
-airmx.status.off
+status.isSilentMode()
 
-// Determine if the machine power is on
-//
-// Data type: boolean
-//
-// true: The machine is on
-// false: The machine is off
-
-airmx.status.power
-
-// The value of Clean Air Delivery Rate (CADR)
-//
-// Data type: number
-
-airmx.status.cidr
-
-// The percentage value of the fan speed
-//
-// Data type: number
-
-airmx.status.fan_percentage 
-
-// Determine if the fan speed is automatically controlled by the machine
+// Determine if noise cancelling is enabled
 //
 // Data type: boolean
 
-airmx.status.auto_fan
+status.isDenoiseOn()
+status.isDenoiseOff()
 
-// Determine whether the AUX heat function is turned on
+// Determine if AUX heat is enabled
 //
 // Data type: boolean
 
-airmx.status.aux_heat
+status.isHeaterOn()
+status.isHeaterOff()
 
-// The percentage to replace the G4 filter
+// The current Clean Air Delivery Rate
+//
+// Data type: number (0 - 100)
+
+status.cadr
+
+// The filter identifications
+//
+// Data type: string
+
+status.g4Id
+status.carbonId
+status.hepaId
+
+// The usage percentage for the filters
 //
 // Data type: number
 // Value range: 0 - 100
@@ -133,29 +151,11 @@ airmx.status.aux_heat
 // 0 indicates the filter is brand new
 // 100 indicates the filter is run out, and should be replaced
 
-airmx.status.filters.g4
-
-// The percentage to replace the carbon filter
-//
-// Data type: number
-// Value range: 0 - 100
-//
-// 0 indicates the filter is brand new
-// 100 indicates the filter is run out, and should be replaced
-
-airmx.status.filters.carbon
-
-// The percentage to replace the HEPA filter
-//
-// Data type: number
-// Value range: 0 - 100
-//
-// 0 indicates the filter is brand new
-// 100 indicates the filter is run out, and should be replaced
-
-airmx.status.filters.hepa
+status.g4Percent
+status.carbonPercent
+status.hepaPercent
 ```
 
 ## License
 
-This package is released under the MIT License.
+This package is released under [the MIT license](LICENSE).
