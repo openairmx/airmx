@@ -1,3 +1,4 @@
-export * from './airmx.js'
-export * from './snow.js'
-export * from './eagle.js'
+export { Airmx } from './airmx.js'
+export type { SnowStatus } from './snow.js'
+export type { EagleStatus, EagleController } from './eagle.js'
+export type * from './types.js'
