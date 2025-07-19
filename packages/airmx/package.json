@@ -1,7 +1,7 @@
 {
   "name": "@lizhineng/airmx",
   "version": "0.0.1",
-  "description": "Control AIRMX Pro 1S with Javascript.",
+  "description": "Control AIRMX Pro with JavaScript.",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lizhineng/airmx.git"
+    "url": "git+https://github.com/openairmx/airmx.git"
   },
   "keywords": [
     "airmx",
@@ -20,9 +20,9 @@
   "author": "Li Zhineng <im@zhineng.li>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lizhineng/airmx/issues"
+    "url": "https://github.com/openairmx/airmx/issues"
   },
-  "homepage": "https://github.com/lizhineng/airmx#readme",
+  "homepage": "https://github.com/openairmx/airmx#readme",
   "peerDependencies": {
     "mqtt": "^5.0.0"
   },
