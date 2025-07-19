@@ -24,11 +24,12 @@
     "url": "https://github.com/lizhineng/airmx/issues"
   },
   "homepage": "https://github.com/lizhineng/airmx#readme",
-  "dependencies": {
-    "mqtt": "^5.10.2"
+  "peerDependencies": {
+    "mqtt": "^5.0.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
+    "mqtt": "^5.0.0",
     "prettier": "3.6.2",
     "ts-jest": "^29.2.5"
   }
