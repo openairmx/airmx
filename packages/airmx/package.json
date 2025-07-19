@@ -1,5 +1,5 @@
 {
-  "name": "@lizhineng/airmx",
+  "name": "airmx",
   "version": "0.0.1",
   "description": "Control AIRMX Pro with JavaScript.",
   "type": "module",
