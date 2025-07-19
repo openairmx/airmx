@@ -42,11 +42,11 @@ Just provide the device ID and control data.
 
 ```typescript
 airmx.control(1, {
-  power: 1,      // 1 indicates on
-  mode: 0,       // 0 indicates manual control
-  cadr: 47,      // CADR accepts a number range from 0 - 100
-  denoise: 0,    // 0 indicates off
-  heatStatus: 0  // 0 indicates off
+  power: 1, // 1 indicates on
+  mode: 0, // 0 indicates manual control
+  cadr: 47, // CADR accepts a number range from 0 - 100
+  denoise: 0, // 0 indicates off
+  heatStatus: 0, // 0 indicates off
 })
 ```
 
@@ -81,10 +81,10 @@ The library replicates the built-in modes available in the official mobile
 applications:
 
 - **AI Mode:** Automatically adjusts CADR (Clean Air Delivery Rate) based
-    on data from a paired air monitor.
+  on data from a paired air monitor.
 - **Silent Mode:** Reduces fan speed to minimize noise output.
 - **Turbo Mode:** Maximizes the device's purification capability, operating
-    at 100% fan speed for rapid air cleaning.
+  at 100% fan speed for rapid air cleaning.
 
 ```typescript
 airmx.device(1).ai()
