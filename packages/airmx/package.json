@@ -7,8 +7,7 @@
   "scripts": {
     "build": "tsc",
     "test": "jest",
-    "test:watch": "jest --watch --verbose",
-    "format": "prettier . --write"
+    "test:watch": "jest --watch --verbose"
   },
   "repository": {
     "type": "git",
@@ -30,7 +29,6 @@
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "mqtt": "^5.0.0",
-    "prettier": "3.6.2",
     "ts-jest": "^29.2.5"
   }
 }
