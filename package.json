@@ -1,12 +1,39 @@
 {
-  "private": true,
+  "name": "airmx",
+  "version": "0.0.1",
+  "description": "Control AIRMX Pro with JavaScript.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch --verbose",
     "format": "prettier --write --cache ."
   },
-  "devDependencies": {
-    "prettier": "3.6.2"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openairmx/airmx.git"
   },
-  "workspaces": [
-    "packages/airmx"
-  ]
+  "keywords": [
+    "airmx",
+    "mqtt"
+  ],
+  "author": "Li Zhineng <im@zhineng.li>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/openairmx/airmx/issues"
+  },
+  "homepage": "https://github.com/openairmx/airmx#readme",
+  "peerDependencies": {
+    "mqtt": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "mqtt": "^5.0.0",
+    "ts-jest": "^29.2.5"
+  }
 }
